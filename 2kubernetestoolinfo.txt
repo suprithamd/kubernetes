@@ -1,0 +1,55 @@
+There are multiple tools to install a kubernetes cluster. minikube and docker client=>local installs and its a single(one-node) cluster(for development,testing and not for production). For production cluster=>Kops and kubeadm are tools to spin up a production cluster.On AWS, the best tools is kops.
+
+At some point AWS EKS, the host of Kubernetes,
+
+will also be available.
+
+At that point this will probably be the preferred option.
+
+With the hosted solution you don't
+
+need to maintain the masters.
+
+With kops you own all the infrastructure
+
+so you also need to maintain a masters.
+
+For other installs, or if you cannot get kops to work,
+
+you can use kubeadm.
+
+Kubeadm is an alternative approach,
+
+and kops is still recommended on AWS.
+
+You also have AWS integrations with kops automatically.
+
+Kubeadm is a more generic tool.
+
+So it's an alternative approach if you're not on AWS
+
+or if you cannot get it working,
+
+but I still recommend you to use lops of you are on AWS
+
+because you will get integrations
+
+with IAM and a load balancer as well.
+
+The kubeadm lectures can be found at the end of this course,
+
+and let you spin up a cluster on DigitalOcean.
+
+Because the focus on this course is really
+
+on minikube and kops I just put the lectures at the end
+
+because they provide you an alternative way
+
+of setting of a cluster.
+
+If you have AWS you should always try AWS first.
+
+If you're going to do bare metal or another cloud provider
+
+then kubeadm can be a good alternative.
