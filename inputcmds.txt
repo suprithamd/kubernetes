@@ -1,0 +1,80 @@
+/*Verify Kubernetes working with docker desktop*/
+
+C:\Windows\System32>kubectl version
+WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
+Client Version: version.Info{Major:"1", Minor:"27", GitVersion:"v1.27.3", GitCommit:"25b4e43193bcda6c7328a6d147b1fb73a33f1598", GitTreeState:"clean", BuildDate:"2023-06-14T09:53:42Z", GoVersion:"go1.20.5", Compiler:"gc", Platform:"windows/amd64"}
+Kustomize Version: v5.0.1
+Server Version: version.Info{Major:"1", Minor:"25", GitVersion:"v1.25.2", GitCommit:"5835544ca568b757a8ecae5c153f317e5736700e", GitTreeState:"clean", BuildDate:"2022-09-21T14:27:13Z", GoVersion:"go1.19.1", Compiler:"gc", Platform:"linux/amd64"}
+WARNING: version difference between client (1.27) and server (1.25) exceeds the supported minor version skew of +/-1
+
+C:\Windows\System32>kubectl get nodes
+NAME             STATUS   ROLES           AGE   VERSION
+docker-desktop   Ready    control-plane   86m   v1.25.2
+
+
+C:\Windows\System32>kubectl config get-contexts
+CURRENT   NAME             CLUSTER          AUTHINFO         NAMESPACE
+*         docker-desktop   docker-desktop   docker-desktop
+
+
+C:\Windows\System32>kubectl config use-context docker-desktop
+Switched to context "docker-desktop".
+
+C:\Windows\System32>kubectl get nodes
+NAME             STATUS   ROLES           AGE   VERSION
+docker-desktop   Ready    control-plane   88m   v1.25.2
+
+
+C:\Windows\System32>kubectl run hello-kubernetes --image=k8s.gcr.io/echoserver:1.4 --port=8080
+pod/hello-kubernetes created
+
+/*Gives error as above kubectl run command will expose pod and not the deployment
+
+C:\Windows\System32>kubectl expose deployment hello-kubernetes --type=NodePort
+Error from server (NotFound): deployments.apps "hello-kubernetes" not found
+
+
+C:\Windows\System32>cd ..
+
+C:\Windows>cd ..
+
+C:\>cd kubernetesex
+
+
+C:\kubernetesex>kubectl run hello-kubernetes --image=k8s.gcr.io/echoserver:1.4 --port=8080
+Error from server (AlreadyExists): pods "hello-kubernetes" already exists
+
+
+C:\kubernetesex>kubectl get pods
+NAME               READY   STATUS    RESTARTS   AGE
+hello-kubernetes   1/1     Running   0          7m52s
+
+C:\kubernetesex>kubectl get deployments
+No resources found in default namespace.
+
+C:\kubernetesex>kubectl expose deployment hello-kubernetes --type=LoadBalancer --port=8080
+Error from server (NotFound): deployments.apps "hello-kubernetes" not found
+
+C:\kubernetesex>kubectl get deployments --all-namespaces
+NAMESPACE     NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system   coredns   2/2     2            2           98m
+
+
+C:\kubernetesex>kubectl expose pod hello-kubernetes --type=NodePort
+service/hello-kubernetes exposed
+
+C:\kubernetesex>kubectl create deployment hello-kubernetes --image=k8s.gcr.io/echoserver:1.4 --port=8080
+deployment.apps/hello-kubernetes created
+
+C:\kubernetesex>kubectl expose deployment hello-kubernetes --type=NodePort --port=8080
+Error from server (AlreadyExists): services "hello-kubernetes" already exists
+
+
+C:\kubernetesex>kubectl get service hello-kubernetes
+NAME               TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+hello-kubernetes   NodePort   10.97.184.35   <none>        8080:30905/TCP   3m30s
+
+C:\kubernetesex>
+
+/*launch url in browser to see output http://localhost:30905/ 
+ */
